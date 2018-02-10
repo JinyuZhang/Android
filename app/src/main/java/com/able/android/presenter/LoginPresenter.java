@@ -11,7 +11,7 @@ import com.able.rx.bean.TipType;
 import com.able.rx.view.ClickCallback;
 
 /**
- * Created by guanlijie on 2018/2/10.
+ * Created by ZhangJinyu on 2018/2/10.
  */
 
 public class LoginPresenter extends AppNetPresenter<ILoginView> implements AppNetResultCallback<LoginRsp>, ClickCallback {

@@ -8,7 +8,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public abstract class BaseNetModel<A, T> extends BaseModel {

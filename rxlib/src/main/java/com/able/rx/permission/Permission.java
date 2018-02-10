@@ -1,7 +1,7 @@
 package com.able.rx.permission;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 import java.util.List;

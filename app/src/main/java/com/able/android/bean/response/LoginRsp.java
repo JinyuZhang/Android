@@ -1,7 +1,7 @@
 package com.able.android.bean.response;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public class LoginRsp {

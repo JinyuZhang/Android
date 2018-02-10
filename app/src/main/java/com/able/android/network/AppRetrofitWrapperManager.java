@@ -4,7 +4,7 @@ import com.able.android.api.Api;
 import com.able.rx.network.RetrofitWrapper;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public class AppRetrofitWrapperManager {

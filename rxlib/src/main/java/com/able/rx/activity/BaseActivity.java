@@ -13,7 +13,7 @@ import me.imid.swipebacklayout.lib.app.SwipeBackActivity;
 import static me.imid.swipebacklayout.lib.SwipeBackLayout.EDGE_LEFT;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public abstract class BaseActivity extends SwipeBackActivity implements IBaseView {

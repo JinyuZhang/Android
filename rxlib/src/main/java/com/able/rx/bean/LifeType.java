@@ -1,7 +1,7 @@
 package com.able.rx.bean;
 
 /**
- * Created by guanlijie on 2018/2/10.
+ * Created by ZhangJinyu on 2018/2/10.
  */
 
 public enum LifeType {

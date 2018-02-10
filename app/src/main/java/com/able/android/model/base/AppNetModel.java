@@ -12,7 +12,7 @@ import able.com.debug.logger.Logger;
 
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public abstract class AppNetModel<T extends AppBaseResponse<D>, D> extends BaseNetModel<ApiService, T> implements NetResultCallback<T> {

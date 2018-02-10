@@ -6,7 +6,7 @@ import com.able.rx.model.ExceptionSwitch;
 import java.net.UnknownHostException;
 
 /**
- * Created by guanlijie on 2018/2/10.
+ * Created by ZhangJinyu on 2018/2/10.
  */
 
 public class AppExceptionSwitch extends ExceptionSwitch {

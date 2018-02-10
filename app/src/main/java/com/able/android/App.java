@@ -9,7 +9,7 @@ import able.com.debug.logger.AndroidLogAdapter;
 import able.com.debug.logger.Logger;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public class App extends DebugApplication {

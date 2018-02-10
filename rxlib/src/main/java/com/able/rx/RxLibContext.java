@@ -3,7 +3,7 @@ package com.able.rx;
 import android.content.Context;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public class RxLibContext {

@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.able.rx.utils.JsonUtils;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public class AppBaseResponse<T> implements Parcelable {

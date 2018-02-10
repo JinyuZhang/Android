@@ -10,7 +10,7 @@ import com.able.android.model.base.AppNetResultCallback;
 import io.reactivex.Observable;
 
 /**
- * Created by guanlijie on 2018/2/9.
+ * Created by ZhangJinyu on 2018/2/9.
  */
 
 public class LoginModel extends AppNetModel<AppBaseResponse<LoginRsp>, LoginRsp> {

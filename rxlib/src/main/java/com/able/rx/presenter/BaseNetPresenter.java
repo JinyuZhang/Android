@@ -3,7 +3,7 @@ package com.able.rx.presenter;
 import com.able.rx.view.ILoadingView;
 
 /**
- * Created by guanlijie on 2018/2/10.
+ * Created by ZhangJinyu on 2018/2/10.
  */
 
 public abstract class BaseNetPresenter<V extends ILoadingView> extends BasePresenter<V> {
