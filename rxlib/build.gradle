@@ -26,6 +26,8 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation project(':debug')
+    implementation project(':qmui')
     compile 'io.reactivex.rxjava2:rxjava:2.1.9'
     compile 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -33,6 +35,6 @@ dependencies {
     compile 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
     compile 'com.squareup.okhttp3:okhttp:3.9.1'
     compile 'me.imid.swipebacklayout.lib:library:1.1.0'
-    implementation project(':debug')
-    implementation project(':qmui')
+    compile 'com.github.bumptech.glide:glide:4.6.1'
+    compile 'jp.wasabeef:glide-transformations:3.1.0'
 }
