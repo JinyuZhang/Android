@@ -9,4 +9,13 @@ public abstract class BaseModel {
 
     }
 
+    private ExceptionSwitch exceptionSwitch;
+
+    public void setExceptionSwitch(ExceptionSwitch exceptionSwitch) {
+        this.exceptionSwitch = exceptionSwitch;
+    }
+
+    public ExceptionSwitch getExceptionSwitch() {
+        return exceptionSwitch;
+    }
 }

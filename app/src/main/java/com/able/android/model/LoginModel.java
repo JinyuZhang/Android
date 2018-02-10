@@ -1,9 +1,11 @@
 package com.able.android.model;
 
 import com.able.android.api.Api;
+import com.able.android.api.ApiService;
 import com.able.android.bean.base.AppBaseResponse;
 import com.able.android.bean.response.LoginRsp;
-import com.able.rx.model.NetResultCallback;
+import com.able.android.model.base.AppNetModel;
+import com.able.android.model.base.AppNetResultCallback;
 
 import io.reactivex.Observable;
 
@@ -11,13 +13,20 @@ import io.reactivex.Observable;
  * Created by guanlijie on 2018/2/9.
  */
 
-public class LoginModel extends AppNetModel<AppBaseResponse<LoginRsp>> {
-    public LoginModel(NetResultCallback<AppBaseResponse<LoginRsp>> netResultCallback) {
-        super(netResultCallback);
+public class LoginModel extends AppNetModel<AppBaseResponse<LoginRsp>, LoginRsp> {
+
+
+    public LoginModel(AppNetResultCallback<LoginRsp> appNetResultCallback) {
+        super(appNetResultCallback);
     }
 
     @Override
-    public Observable<AppBaseResponse<LoginRsp>> createObservableCall(Api apiService) {
+    public String getTag() {
+        return Api.LOGIN;
+    }
+
+    @Override
+    public Observable<AppBaseResponse<LoginRsp>> createObservableCall(ApiService apiService) {
         return apiService.login(username, password);
     }
 

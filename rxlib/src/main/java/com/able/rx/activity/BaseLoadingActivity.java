@@ -7,6 +7,7 @@ import android.view.View;
 import com.able.rx.R;
 import com.able.rx.bean.LoadingType;
 import com.able.rx.bean.TipType;
+import com.able.rx.tools.timer.RxTimer;
 import com.able.rx.view.ClickCallback;
 import com.able.rx.view.ContentView;
 import com.able.rx.view.ILoadingView;
@@ -14,6 +15,7 @@ import com.qmuiteam.qmui.widget.QMUIEmptyView;
 import com.qmuiteam.qmui.widget.dialog.QMUITipDialog;
 
 import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by ZhangJinyu on 2018/2/9.
@@ -26,13 +28,14 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
     private QMUITipDialog.Builder tipDialogBuilder;
     private QMUITipDialog qmuiLoadingDialog;
     private QMUITipDialog qmuiTipDialog;
+    private RxTimer rxTimer;
 
     @Override
 
     public void contentViewInit(ContentView contentView) {
         contentView.initTopbar();
         qmuiEmptyView = contentView.getQmuiEmptyView();
-        qmuiEmptyView.setBackgroundResource(R.color.colorAccent);
+        qmuiEmptyView.setBackgroundResource(R.color.colorContent);
     }
 
     public QMUIEmptyView getQmuiEmptyView() {
@@ -42,6 +45,9 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
     private void initQmuiDialogBuilder() {
         if (tipDialogBuilder == null) {
             tipDialogBuilder = new QMUITipDialog.Builder(this);
+        }
+        if (rxTimer == null) {
+            rxTimer = new RxTimer();
         }
     }
 
@@ -84,7 +90,9 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
         } else {
             initQmuiDialogBuilder();
             resetTipDialogStatus();
-            qmuiTipDialog.show();
+            if (qmuiTipDialog != null) {
+                qmuiTipDialog.dismiss();
+            }
             switch (tipType) {
                 case INFO:
                     tipDialogBuilder.setIconType(QMUITipDialog.Builder.ICON_TYPE_INFO);
@@ -98,8 +106,18 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
             }
             qmuiTipDialog = tipDialogBuilder.setTipWord(titleText).create();
             qmuiTipDialog.show();
+            rxTimer.postDelayed(2, TimeUnit.SECONDS, tipDialogAutoDismissRunnable);
         }
     }
+
+    private Runnable tipDialogAutoDismissRunnable = new Runnable() {
+        @Override
+        public void run() {
+            if (qmuiTipDialog != null) {
+                qmuiTipDialog.dismiss();
+            }
+        }
+    };
 
     @Override
     public void showMsg(String titleText, String buttonText, String msg, final ClickCallback clickCallback) {
@@ -175,6 +193,9 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
         dismissAllLoading();
         if (qmuiTipDialog != null) {
             qmuiTipDialog.dismiss();
+        }
+        if (rxTimer != null) {
+            rxTimer.onDestroy();
         }
     }
 }

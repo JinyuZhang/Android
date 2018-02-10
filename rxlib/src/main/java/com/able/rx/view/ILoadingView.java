@@ -12,7 +12,7 @@ public interface ILoadingView extends IBaseView {
 
     void showMsg(TipType tipType, String titleText, String msg);
 
-    void showMsg(String titleText, String buttonText, String msg, ClickCallback clickCallback);
+    void showMsg(String titleText, String msg, String buttonText, ClickCallback clickCallback);
 
     void dismiss(String tag, LoadingType loadingType);
 

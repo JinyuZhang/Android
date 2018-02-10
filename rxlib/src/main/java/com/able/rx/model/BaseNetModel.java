@@ -17,10 +17,13 @@ public abstract class BaseNetModel<A, T> extends BaseModel {
     private Observable<T> observableCall;
     private NetResultCallback<T> netResultCallback;
 
-    public BaseNetModel(NetResultCallback<T> netResultCallback) {
-        this.netResultCallback = netResultCallback;
+    public BaseNetModel() {
         retrofitWrapper = createRetrofitWrapper(retrofitWrapper);
         apiService = retrofitWrapper.createService(getApiService());
+    }
+
+    public void setNetResultCallback(NetResultCallback<T> netResultCallback) {
+        this.netResultCallback = netResultCallback;
     }
 
     public abstract RetrofitWrapper createRetrofitWrapper(RetrofitWrapper retrofitWrapper);
@@ -46,5 +49,9 @@ public abstract class BaseNetModel<A, T> extends BaseModel {
                 }
             }
         });
+    }
+
+    public void onDestroy() {
+        observableCall.unsubscribeOn(Schedulers.io());
     }
 }

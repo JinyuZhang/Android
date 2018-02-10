@@ -4,23 +4,17 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.able.android.R;
-import com.able.android.bean.base.AppBaseResponse;
-import com.able.android.bean.response.LoginRsp;
-import com.able.android.model.LoginModel;
+import com.able.android.presenter.LoginPresenter;
+import com.able.android.presenter.view.ILoginView;
 import com.able.rx.activity.BaseLoadingActivity;
-import com.able.rx.bean.LoadingType;
 import com.able.rx.convert.ConvertCallback;
 import com.able.rx.convert.RxConvert;
-import com.able.rx.model.NetResultCallback;
-import com.able.rx.utils.JsonUtils;
-import com.able.rx.view.ClickCallback;
 
 import able.com.debug.logger.Logger;
 
-public class MainActivity extends BaseLoadingActivity implements NetResultCallback<AppBaseResponse<LoginRsp>>, ClickCallback {
+public class MainActivity extends BaseLoadingActivity implements ILoginView {
 
     private TextView textView;
-    private LoginModel loginModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,9 +25,8 @@ public class MainActivity extends BaseLoadingActivity implements NetResultCallba
     }
 
     private void ddd() {
-        loginModel = new LoginModel(this);
-        loginModel.login("zhangjinyu", "123456");
-        showLoading(getClass().getName(), LoadingType.DIALOG, "正在登录,请稍候", "");
+        LoginPresenter loginPresenter = new LoginPresenter(this);
+        loginPresenter.login();
     }
 
     private void convert() {
@@ -62,19 +55,27 @@ public class MainActivity extends BaseLoadingActivity implements NetResultCallba
     }
 
     @Override
-    public void netResult(AppBaseResponse<LoginRsp> loginRspAppBaseResponse) {
-        Logger.d(JsonUtils.getInstance().toJson(loginRspAppBaseResponse));
-        textView.setText(JsonUtils.getInstance().toJson(loginRspAppBaseResponse));
-        dismiss(getClass().getName(), LoadingType.DIALOG);
+    public String getUsername() {
+        return "zhangjwinyu";
     }
 
     @Override
-    public void netResultException(Throwable throwable) {
-        Logger.e(throwable.toString());
+    public String getPassword() {
+        return "123456";
     }
 
     @Override
-    public void clickCall() {
-        Logger.d("重试");
+    public String setUsername() {
+        return null;
+    }
+
+    @Override
+    public String setPassword() {
+        return null;
+    }
+
+    @Override
+    public void loginSuccess() {
+
     }
 }

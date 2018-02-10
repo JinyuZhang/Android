@@ -24,6 +24,10 @@ public class AppBaseResponse<T> implements Parcelable {
         return msg;
     }
 
+    public String getServerTime() {
+        return serverTime;
+    }
+
     public T getData() {
         return data;
     }
@@ -41,6 +45,7 @@ public class AppBaseResponse<T> implements Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(this.status);
         dest.writeString(this.msg);
+        dest.writeString(this.serverTime);
         dest.writeString(data.getClass().getName());
         dest.writeString(JsonUtils.getInstance().toJson(data));
     }
@@ -51,6 +56,7 @@ public class AppBaseResponse<T> implements Parcelable {
     protected AppBaseResponse(Parcel in) {
         this.status = in.readInt();
         this.msg = in.readString();
+        this.serverTime = in.readString();
         String dataName = in.readString();
         String dataJson = in.readString();
         if (TextUtils.isEmpty(dataJson)) {

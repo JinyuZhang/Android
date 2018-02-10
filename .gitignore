@@ -10,3 +10,5 @@
 *.bat
 gradle.properties
 gradlew
+gradle-wrapper.properties
+.idea

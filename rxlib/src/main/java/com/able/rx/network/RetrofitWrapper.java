@@ -62,4 +62,5 @@ public class RetrofitWrapper {
         }
         return retrofit.create(service);
     }
+
 }

@@ -1,5 +1,6 @@
 package com.able.rx.activity;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,4 +47,13 @@ public abstract class BaseActivity extends SwipeBackActivity implements IBaseVie
         contentView.setContentView(view, params);
     }
 
+    @Override
+    public Context getContent() {
+        return this;
+    }
+
+    @Override
+    public String getClassName() {
+        return getClass().getName();
+    }
 }
