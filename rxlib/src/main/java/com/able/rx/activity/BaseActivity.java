@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.able.rx.bean.LifeCycle;
 import com.able.rx.bean.LifeType;
 import com.able.rx.router.RouterAction;
+import com.able.rx.tools.event.BusEvent;
 import com.able.rx.tools.event.RxBus;
 import com.able.rx.tools.timer.RxTimer;
 import com.able.rx.view.ContentView;
@@ -90,13 +90,13 @@ public abstract class BaseActivity extends SwipeBackActivity implements IBaseVie
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        RxBus.getInstance().post(getClassName(), new LifeCycle(LifeType.ON_STOP));
-        RxBus.getInstance().post(getClassName(), new LifeCycle(LifeType.ON_DESTROY));
+    protected void onDestroy() {
+        super.onDestroy();
+        BusEvent<LifeType> busEvent = new BusEvent<>(getClassName());
+        busEvent.setData(LifeType.ON_DESTROY);
+        RxBus.getInstance().post(getClassName(), busEvent);
         if (rxTimer != null) {
             rxTimer.onDestroy();
         }
     }
-
 }

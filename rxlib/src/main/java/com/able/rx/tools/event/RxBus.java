@@ -14,16 +14,16 @@ import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.annotations.NonNull;
-import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Predicate;
 import io.reactivex.schedulers.Schedulers;
 import io.reactivex.subjects.PublishSubject;
 import io.reactivex.subjects.Subject;
 
-public class RxBus {
-    private HashMap<String, CompositeDisposable> mSubscriptionMap;
-    private final Map<String, Subject<Object>> stringSubjectMap;
+public class RxBus<T> {
+    private HashMap<String, Disposable> mSubscriptionMap;
+    private Map<String, Subject<BusEvent<T>>> stringSubjectMap;
     private static volatile RxBus instance;
 
     private RxBus() {
@@ -41,28 +41,34 @@ public class RxBus {
         return instance;
     }
 
-    public <T> void register(@NonNull Class<T> clazz, Consumer<T> next) {
-        register(clazz.getName(), clazz, next, null);
+    public void register(@NonNull Class clazz, Consumer<BusEvent<T>> next) {
+        register(clazz, next, null);
     }
 
-    public <T> void register(@NonNull String tag, @NonNull Class<T> clazz, Consumer<T> next) {
-        register(tag, clazz, next, null);
+    public void register(@NonNull String tag, Consumer<BusEvent<T>> next) {
+        register(tag, next, null);
     }
 
-    public <T> void register(@NonNull Class<T> clazz, Consumer<T> next, Consumer<Throwable> error) {
-        register(clazz.getName(), clazz, next, error);
+    public void register(@NonNull Class clazz, Consumer<BusEvent<T>> next, Consumer<Throwable> error) {
+        register(clazz.getName(), next, error);
     }
 
-    public <T> void register(@NonNull String tag, @NonNull Class<T> clazz, Consumer<T> next, Consumer<Throwable> error) {
-        Subject<Object> objectSubject;
+    public void register(@NonNull final String tag, Consumer<BusEvent<T>> next, Consumer<Throwable> error) {
+        Subject<BusEvent<T>> objectSubject;
         if (stringSubjectMap.containsKey(tag)) {
             objectSubject = stringSubjectMap.get(tag);
         } else {
-            objectSubject = PublishSubject.create().toSerialized();
+            PublishSubject<BusEvent<T>> objectPublishSubject = PublishSubject.create();
+            objectSubject = objectPublishSubject.toSerialized();
             stringSubjectMap.put(tag, objectSubject);
         }
-        Flowable<T> tFollowable = objectSubject.toFlowable(BackpressureStrategy.BUFFER)
-                .ofType(clazz).subscribeOn(Schedulers.io())
+        Flowable<BusEvent<T>> tFollowable = objectSubject.toFlowable(BackpressureStrategy.BUFFER)
+                .filter(new Predicate<BusEvent>() {
+                    @Override
+                    public boolean test(BusEvent busEvent) throws Exception {
+                        return busEvent.getTag().equals(tag);
+                    }
+                }).subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
         Disposable disposable;
         if (error == null) {
@@ -79,29 +85,14 @@ public class RxBus {
             mSubscriptionMap = new HashMap<>();
         }
         if (mSubscriptionMap.get(tag) != null) {
-            mSubscriptionMap.get(tag).add(disposable);
+            mSubscriptionMap.put(tag, disposable);
         } else {
-            //一次性容器,可以持有多个并提供 添加和移除。
-            CompositeDisposable disposables = new CompositeDisposable();
-            disposables.add(disposable);
-            mSubscriptionMap.put(tag, disposables);
+            mSubscriptionMap.put(tag, disposable);
         }
     }
 
     public void unRegister(@NonNull Class clazz) {
-        if (mSubscriptionMap == null) {
-            return;
-        }
-
-        String key = clazz.getClass().getName();
-        if (!mSubscriptionMap.containsKey(key)) {
-            return;
-        }
-        if (mSubscriptionMap.get(key) != null) {
-            mSubscriptionMap.get(key).dispose();
-        }
-
-        mSubscriptionMap.remove(key);
+        unRegister(clazz.getName());
     }
 
     public void unRegister(String tag) {
@@ -118,11 +109,11 @@ public class RxBus {
         mSubscriptionMap.remove(tag);
     }
 
-    public void post(@NonNull Object o) {
+    public void post(@NonNull BusEvent<T> o) {
         post(o.getClass().getName(), o);
     }
 
-    public void post(@NonNull String tag, @NonNull Object o) {
+    public void post(@NonNull String tag, @NonNull BusEvent<T> o) {
         for (String key : stringSubjectMap.keySet()) {
             if (tag.equals(key)) {
                 stringSubjectMap.get(key).onNext(o);

@@ -19,6 +19,11 @@ public class LifeCycle implements Parcelable {
     }
 
     @Override
+    public String toString() {
+        return lifeType.name();
+    }
+
+    @Override
     public int describeContents() {
         return 0;
     }
