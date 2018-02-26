@@ -1,15 +1,21 @@
 package com.able.android.ui;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 
 import com.able.android.R;
 import com.able.android.presenter.LoginPresenter;
 import com.able.android.presenter.view.ILoginView;
 import com.able.rx.activity.BaseLoadingActivity;
+import com.able.rx.view.ContentView;
+
+import butterknife.BindView;
 
 public class MainActivity extends BaseLoadingActivity implements ILoginView {
 
-
+    @BindView(R.id.btn_login)
+    Button button;
     private LoginPresenter loginPresenter;
 
     @Override
@@ -20,7 +26,18 @@ public class MainActivity extends BaseLoadingActivity implements ILoginView {
         setTopbarTitle("登录");
     }
 
-    private void login() {
+    @Override
+    public void contentViewInit(ContentView contentView) {
+        super.contentViewInit(contentView);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login();
+            }
+        });
+    }
+
+    public void login() {
         if (loginPresenter == null) {
             loginPresenter = new LoginPresenter(this);
         }
