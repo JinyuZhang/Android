@@ -213,11 +213,11 @@ public class QMUIBottomSheet extends Dialog {
 
         private QMUIBottomSheet mDialog;
         private List<BottomSheetListItemData> mItems;
-        private BaseAdapter mAdapter;
+        private ListAdapter mAdapter;
         private List<View> mHeaderViews;
         private ListView mContainerView;
         private boolean mNeedRightMark; //是否需要rightMark,标识当前项
-        private int mCheckedIndex;
+        private int mCheckedIndex = -1;
         private String mTitle;
         private TextView mTitleTv;
         private OnSheetItemClickListener mOnSheetItemClickListener;
@@ -252,6 +252,30 @@ public class QMUIBottomSheet extends Dialog {
          */
         public BottomListSheetBuilder addItem(String textAndTag) {
             mItems.add(new BottomSheetListItemData(textAndTag, textAndTag));
+            return this;
+        }
+
+        /**
+         * @param textAndTags Item 的文字内容，同时会把内容设置为 tag。
+         */
+        public BottomListSheetBuilder addItems(List<String> textAndTags) {
+            if (textAndTags != null && !textAndTags.isEmpty()) {
+                for (String text : textAndTags) {
+                    mItems.add(new BottomSheetListItemData(text, text));
+                }
+            }
+            return this;
+        }
+
+        /**
+         * @param textAndTags Item 的文字内容，同时会把内容设置为 tag。
+         */
+        public BottomListSheetBuilder addItems(String[] textAndTags) {
+            if (textAndTags != null && textAndTags.length != 0) {
+                for (String text : textAndTags) {
+                    mItems.add(new BottomSheetListItemData(text, text));
+                }
+            }
             return this;
         }
 
@@ -344,13 +368,18 @@ public class QMUIBottomSheet extends Dialog {
             if (mOnBottomDialogDismissListener != null) {
                 mDialog.setOnDismissListener(mOnBottomDialogDismissListener);
             }
+            if (mNeedRightMark && mOnSheetItemClickListener != null && mCheckedIndex != -1) {
+                mContainerView.setSelection(mCheckedIndex);
+                BottomSheetListItemData item = mAdapter.getItem(mCheckedIndex);
+                mOnSheetItemClickListener.onClick(mDialog, mContainerView.getSelectedView(), mCheckedIndex, item.tag);
+            }
             return mDialog;
         }
 
         private View buildViews() {
             View wrapperView = View.inflate(mContext, getContentViewLayoutId(), null);
-            mTitleTv = (TextView) wrapperView.findViewById(R.id.title);
-            mContainerView = (ListView) wrapperView.findViewById(R.id.listview);
+            mTitleTv = wrapperView.findViewById(R.id.title);
+            mContainerView = wrapperView.findViewById(R.id.listview);
             if (mTitle != null && mTitle.length() != 0) {
                 mTitleTv.setVisibility(View.VISIBLE);
                 mTitleTv.setText(mTitle);
@@ -486,8 +515,8 @@ public class QMUIBottomSheet extends Dialog {
                     LayoutInflater inflater = LayoutInflater.from(mContext);
                     convertView = inflater.inflate(R.layout.qmui_bottom_sheet_list_item, parent, false);
                     holder = new ViewHolder();
-                    holder.imageView = (ImageView) convertView.findViewById(R.id.bottom_dialog_list_item_img);
-                    holder.textView = (TextView) convertView.findViewById(R.id.bottom_dialog_list_item_title);
+                    holder.imageView = convertView.findViewById(R.id.bottom_dialog_list_item_img);
+                    holder.textView = convertView.findViewById(R.id.bottom_dialog_list_item_title);
                     holder.markView = convertView.findViewById(R.id.bottom_dialog_list_item_mark_view_stub);
                     holder.redPoint = convertView.findViewById(R.id.bottom_dialog_list_item_point);
                     convertView.setTag(holder);
@@ -636,7 +665,7 @@ public class QMUIBottomSheet extends Dialog {
         public QMUIBottomSheetItemView createItemView(Drawable drawable, CharSequence text, Object tag, int subscriptRes) {
             LayoutInflater inflater = LayoutInflater.from(mContext);
             QMUIBottomSheetItemView itemView = (QMUIBottomSheetItemView) inflater.inflate(R.layout.qmui_bottom_sheet_grid_item, null, false);
-            TextView titleTV = (TextView) itemView.findViewById(R.id.grid_item_title);
+            TextView titleTV = itemView.findViewById(R.id.grid_item_title);
             if (mItemTextTypeFace != null) {
                 titleTV.setTypeface(mItemTextTypeFace);
             }
@@ -644,11 +673,11 @@ public class QMUIBottomSheet extends Dialog {
 
             itemView.setTag(tag);
             itemView.setOnClickListener(this);
-            AppCompatImageView imageView = (AppCompatImageView) itemView.findViewById(R.id.grid_item_image);
+            AppCompatImageView imageView = itemView.findViewById(R.id.grid_item_image);
             imageView.setImageDrawable(drawable);
 
             if (subscriptRes != 0) {
-                ViewStub stub = (ViewStub) itemView.findViewById(R.id.grid_item_subscript);
+                ViewStub stub = itemView.findViewById(R.id.grid_item_subscript);
                 View inflated = stub.inflate();
                 ((ImageView) inflated).setImageResource(subscriptRes);
             }
@@ -697,9 +726,9 @@ public class QMUIBottomSheet extends Dialog {
         private View buildViews() {
             LinearLayout baseLinearLayout;
             baseLinearLayout = (LinearLayout) View.inflate(mContext, getContentViewLayoutId(), null);
-            LinearLayout firstLine = (LinearLayout) baseLinearLayout.findViewById(R.id.bottom_sheet_first_linear_layout);
-            LinearLayout secondLine = (LinearLayout) baseLinearLayout.findViewById(R.id.bottom_sheet_second_linear_layout);
-            mBottomButton = (TextView) baseLinearLayout.findViewById(R.id.bottom_sheet_button);
+            LinearLayout firstLine = baseLinearLayout.findViewById(R.id.bottom_sheet_first_linear_layout);
+            LinearLayout secondLine = baseLinearLayout.findViewById(R.id.bottom_sheet_second_linear_layout);
+            mBottomButton = baseLinearLayout.findViewById(R.id.bottom_sheet_button);
 
             int maxItemCountEachLine = Math.max(mFirstLineViews.size(), mSecondLineViews.size());
             int screenWidth = QMUIDisplayHelper.getScreenWidth(mContext);

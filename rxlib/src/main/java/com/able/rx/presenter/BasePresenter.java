@@ -14,8 +14,8 @@ import io.reactivex.functions.Consumer;
  * Created by ZhangJinyu on 2018/2/9.
  */
 
-public class BasePresenter<V extends IBaseView> {
-    private V contentView;
+public abstract class BasePresenter<V extends IBaseView> {
+    protected V contentView;
     private final String classTag;
 
     public BasePresenter(@NonNull V view) {
@@ -49,4 +49,6 @@ public class BasePresenter<V extends IBaseView> {
     public void onDestroy() {
         RxBus.getInstance().unRegister(classTag);
     }
+
+    public abstract String getTag();
 }

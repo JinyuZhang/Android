@@ -1,5 +1,6 @@
 package com.able.rx.presenter;
 
+import com.able.rx.bean.TipType;
 import com.able.rx.view.ILoadingView;
 
 /**
@@ -7,13 +8,22 @@ import com.able.rx.view.ILoadingView;
  */
 
 public abstract class BaseNetPresenter<V extends ILoadingView> extends BasePresenter<V> {
-    protected V contentView;
-
     public BaseNetPresenter(V view) {
         super(view);
-        this.contentView = view;
         netPresenterCreated();
     }
 
     public abstract void netPresenterCreated();
+
+    public abstract void dismissLoading();
+
+    public void netResultFail(int code, String msg) {
+        dismissLoading();
+        contentView.showMsg(TipType.FAIL, msg, null);
+    }
+
+    public void netResultException(Throwable throwable, String titleMsg, String detailMsg) {
+        dismissLoading();
+        contentView.showMsg(TipType.FAIL, titleMsg, detailMsg);
+    }
 }

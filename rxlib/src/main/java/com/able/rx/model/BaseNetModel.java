@@ -11,9 +11,9 @@ import io.reactivex.schedulers.Schedulers;
  * Created by ZhangJinyu on 2018/2/9.
  */
 
-public abstract class BaseNetModel<A, T> extends BaseModel {
+public abstract class BaseNetModel<S, T> extends BaseModel implements NetResultCallback<T> {
     private RetrofitWrapper retrofitWrapper;
-    private final A apiService;
+    private final S apiService;
     private Observable<T> observableCall;
     private NetResultCallback<T> netResultCallback;
 
@@ -26,13 +26,13 @@ public abstract class BaseNetModel<A, T> extends BaseModel {
         this.netResultCallback = netResultCallback;
     }
 
+    public abstract Class<S> getApiService();
+
     public abstract RetrofitWrapper createRetrofitWrapper(RetrofitWrapper retrofitWrapper);
 
-    public abstract Class<A> getApiService();
+    public abstract Observable<T> createObservableCall(S apiService);
 
-    public abstract Observable<T> createObservableCall(A apiService);
-
-    public void excute() {
+    public void execute() {
         observableCall = createObservableCall(apiService);
         observableCall.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<T>() {
             @Override

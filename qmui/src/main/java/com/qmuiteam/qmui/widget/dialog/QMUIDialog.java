@@ -34,6 +34,7 @@ import com.qmuiteam.qmui.widget.QMUIWrapContentScrollView;
 import com.qmuiteam.qmui.widget.textview.QMUISpanTouchFixTextView;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * QMUIDialog 对话框一般由 {@link QMUIDialogBuilder} 及其子类创建, 不同的 Builder 可以创建不同类型的对话框,
@@ -573,6 +574,25 @@ public class QMUIDialog extends Dialog {
          * @param listener 菜单项的点击事件,可以在点击事件里调用 {@link #setCheckedItems(int[])}} 来设置选中某些菜单项
          */
         public MultiCheckableDialogBuilder addItems(CharSequence[] items, OnClickListener listener) {
+            if (items == null || items.length == 0) {
+                return this;
+            }
+            for (CharSequence item : items) {
+                addItem(new QMUIDialogMenuItemView.CheckItemView(mContext, true, item), listener);
+            }
+            return this;
+        }
+
+        /**
+         * 添加菜单项
+         *
+         * @param items    所有菜单项的文字
+         * @param listener 菜单项的点击事件,可以在点击事件里调用 {@link #setCheckedItems(int[])}} 来设置选中某些菜单项
+         */
+        public MultiCheckableDialogBuilder addItems(List<CharSequence> items, OnClickListener listener) {
+            if (items == null || items.size() == 0) {
+                return this;
+            }
             for (CharSequence item : items) {
                 addItem(new QMUIDialogMenuItemView.CheckItemView(mContext, true, item), listener);
             }

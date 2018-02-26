@@ -44,7 +44,7 @@ public class ContentView extends LinearLayout {
         contentView.addView(qmuiEmptyView, matchLayoutParams);
     }
 
-    public void initTopbar() {
+    public QMUITopBar initTopbar() {
         if (qmuiTopBar == null) {
             qmuiTopBar = new QMUITopBar(getContext());
         }
@@ -53,6 +53,7 @@ public class ContentView extends LinearLayout {
         } else {
             addView(qmuiTopBar, wrapLayoutParams);
         }
+        return qmuiTopBar;
     }
 
 

@@ -8,13 +8,11 @@ import com.squareup.leakcanary.LeakCanary;
  * Created by ZhangJinyu on 2018/2/9.
  */
 
-public class DebugApplication extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        if (LeakCanary.isInAnalyzerProcess(this)) {
+public class DebugApplication {
+    public static void init(Application application) {
+        if (LeakCanary.isInAnalyzerProcess(application)) {
             return;
         }
-        LeakCanary.install(this);
+        LeakCanary.install(application);
     }
 }

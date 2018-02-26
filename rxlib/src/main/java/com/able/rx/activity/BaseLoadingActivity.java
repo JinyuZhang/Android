@@ -1,6 +1,7 @@
 package com.able.rx.activity;
 
 
+import android.app.Dialog;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -21,7 +22,7 @@ import java.util.concurrent.TimeUnit;
  * Created by ZhangJinyu on 2018/2/9.
  */
 
-public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
+public abstract class BaseLoadingActivity extends BaseTopBarActivity implements ILoadingView {
     private QMUIEmptyView qmuiEmptyView;
     private HashMap<String, LoadingType> contentLoadingTags = new HashMap<>();
     private HashMap<String, LoadingType> dialogLoadingTags = new HashMap<>();
@@ -33,7 +34,7 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
     @Override
 
     public void contentViewInit(ContentView contentView) {
-        contentView.initTopbar();
+        super.contentViewInit(contentView);
         qmuiEmptyView = contentView.getQmuiEmptyView();
         qmuiEmptyView.setBackgroundResource(R.color.colorContent);
     }
@@ -64,13 +65,13 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
     }
 
     @Override
-    public void showLoading(String tag, LoadingType loadingType, String titleText, String detailText) {
+    public Dialog showLoading(String tag, LoadingType loadingType, String titleText, String detailText) {
         switch (loadingType) {
             case CONTENT:
                 contentLoadingTags.put(tag, loadingType);
                 qmuiEmptyView.show(titleText, detailText);
                 qmuiEmptyView.setLoadingShowing(true);
-                break;
+                return null;
             case DIALOG:
                 dialogLoadingTags.put(tag, loadingType);
                 initQmuiDialogBuilder();
@@ -79,14 +80,16 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
                         .setTipWord(TextUtils.isEmpty(titleText) ? "正在加载" : titleText)
                         .create();
                 qmuiLoadingDialog.show();
-                break;
+                return qmuiLoadingDialog;
         }
+        return null;
     }
 
     @Override
-    public void showMsg(TipType tipType, String titleText, String msg) {
+    public Dialog showMsg(TipType tipType, String titleText, String msg) {
         if (tipType.equals(TipType.CONTENT)) {
             qmuiEmptyView.show(titleText, msg);
+            return null;
         } else {
             initQmuiDialogBuilder();
             resetTipDialogStatus();
@@ -107,6 +110,7 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
             qmuiTipDialog = tipDialogBuilder.setTipWord(titleText).create();
             qmuiTipDialog.show();
             rxTimer.postDelayed(2, TimeUnit.SECONDS, tipDialogAutoDismissRunnable);
+            return qmuiTipDialog;
         }
     }
 
@@ -188,12 +192,17 @@ public class BaseLoadingActivity extends BaseActivity implements ILoadingView {
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        dismissAllLoading();
+    protected void onStop() {
+        super.onStop();
         if (qmuiTipDialog != null) {
             qmuiTipDialog.dismiss();
         }
+        dismissAllLoading();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (rxTimer != null) {
             rxTimer.onDestroy();
         }

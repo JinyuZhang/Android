@@ -5,7 +5,7 @@
  * Zhang Jinyu,All Rights Reserved
  */
 
-package com.able.rx.utils;
+package com.able.utils;
 
 import android.os.Build;
 import android.text.Html;

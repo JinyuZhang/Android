@@ -5,5 +5,5 @@ package com.able.rx.bean;
  */
 
 public enum LoadingType {
-    CONTENT, DIALOG
+    CONTENT, NONE, DIALOG
 }

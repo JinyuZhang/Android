@@ -1,6 +1,6 @@
 package com.able.android.network;
 
-import com.able.android.api.Api;
+import com.able.android.api.ApiService;
 import com.able.rx.network.RetrofitWrapper;
 
 /**
@@ -29,7 +29,7 @@ public class AppRetrofitWrapperManager {
 
     public RetrofitWrapper getAppRetrofitWrapper() {
         if (appRetrofitWrapper == null) {
-            appRetrofitWrapper = new RetrofitWrapper(true, Api.HOST_URL);
+            appRetrofitWrapper = new RetrofitWrapper(true, ApiService.HOST_URL);
         }
         return appRetrofitWrapper;
     }

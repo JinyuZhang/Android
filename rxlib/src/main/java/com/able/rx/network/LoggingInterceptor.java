@@ -7,8 +7,8 @@
 
 package com.able.rx.network;
 
-import com.able.rx.utils.EncodeUtils;
 import com.able.rx.utils.JsonUtils;
+import com.able.utils.EncodeUtils;
 
 import java.io.IOException;
 

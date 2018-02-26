@@ -1,9 +1,10 @@
 package com.able.android.presenter.view;
 
+
 import com.able.rx.view.ILoadingView;
 
 /**
- * Created by ZhangJinyu on 2018/2/10.
+ * Created by haoyaun on 2018/1/26.
  */
 
 public interface ILoginView extends ILoadingView {
@@ -11,9 +12,11 @@ public interface ILoginView extends ILoadingView {
 
     String getPassword();
 
-    String setUsername();
+    String getDeviceId();
 
-    String setPassword();
+    void setUsername(String username);
+
+    void setPassword(String password);
 
     void loginSuccess();
 }

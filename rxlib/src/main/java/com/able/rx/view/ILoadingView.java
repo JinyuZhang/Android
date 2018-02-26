@@ -1,5 +1,7 @@
 package com.able.rx.view;
 
+import android.app.Dialog;
+
 import com.able.rx.bean.LoadingType;
 import com.able.rx.bean.TipType;
 
@@ -8,9 +10,9 @@ import com.able.rx.bean.TipType;
  */
 
 public interface ILoadingView extends IBaseView {
-    void showLoading(String tag, LoadingType loadingType, String titleText, String detailText);
+    Dialog showLoading(String tag, LoadingType loadingType, String titleText, String detailText);
 
-    void showMsg(TipType tipType, String titleText, String msg);
+    Dialog showMsg(TipType tipType, String titleText, String msg);
 
     void showMsg(String titleText, String msg, String buttonText, ClickCallback clickCallback);
 

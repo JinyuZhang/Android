@@ -1,4 +1,4 @@
-package com.able.rx.convert;
+package com.able.rx.tools.convert;
 
 import io.reactivex.Observable;
 import io.reactivex.ObservableEmitter;
@@ -35,8 +35,8 @@ public class RxConvert {
     /**
      * 开始转换
      *
-     * @param <S>
-     * @param <R>
+     * @param <S> 源数据
+     * @param <R> 处理后的数据
      */
     public <S, R> void convert(final ConvertCallback<S, R> convertCallback) {
         Observable.create(new ObservableOnSubscribe<S>() {

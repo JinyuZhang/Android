@@ -7,7 +7,7 @@ import android.content.Context;
  */
 
 public interface IBaseView {
-    Context getContent();
+    Context getContext();
 
     String getClassName();
 }

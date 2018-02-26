@@ -10,6 +10,9 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+    lintOptions{
+        abortOnError false
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -21,7 +24,8 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    implementation project(':rxlib')
-    implementation project(':debug')
-    implementation project(':qmui')
+    compile project(':rxlib')
+    compile project(':qmui')
+    compile project(':utils')
+    compile project(':debug')
 }
