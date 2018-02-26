@@ -9,14 +9,10 @@ import com.able.android.R;
 import com.able.android.presenter.LoginPresenter;
 import com.able.android.presenter.view.ILoginView;
 import com.able.rx.activity.BaseLoadingActivity;
-import com.able.rx.bean.LifeCycle;
-import com.able.rx.tools.event.BusEvent;
 import com.able.rx.tools.event.RxBus;
 import com.able.rx.view.ContentView;
 
-import able.com.debug.logger.Logger;
 import butterknife.BindView;
-import io.reactivex.functions.Consumer;
 
 public class MainActivity extends BaseLoadingActivity implements ILoginView {
 
@@ -28,14 +24,14 @@ public class MainActivity extends BaseLoadingActivity implements ILoginView {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        RxBus.getInstance().register(RxBusActivity.class, new Consumer<BusEvent<LifeCycle>>() {
-            @Override
-            public void accept(BusEvent<LifeCycle> lifeCycle) throws Exception {
-                Logger.d(lifeCycle.toString() + "===========================");
-            }
-        });
         login();
         setTopbarTitle("登录");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        RxBus.getInstance().unRegister(RxBusActivity.class);
     }
 
     @Override

@@ -7,7 +7,6 @@ import com.able.rx.tools.event.BusEvent;
 import com.able.rx.tools.event.RxBus;
 import com.able.rx.view.IBaseView;
 
-import able.com.debug.logger.Logger;
 import io.reactivex.annotations.NonNull;
 import io.reactivex.functions.Consumer;
 
@@ -30,16 +29,12 @@ public abstract class BasePresenter<V extends IBaseView> {
         public void accept(BusEvent<LifeType> busEvent) throws Exception {
             switch (busEvent.getData()) {
                 case ON_CREATE:
-                    Logger.d("onCreate");
                     break;
                 case ON_RESUME:
-                    Logger.d("onResume");
                     break;
                 case ON_STOP:
-                    Logger.d("onStop");
                     break;
                 case ON_DESTROY:
-                    Logger.d("onDestroy");
                     onDestroy();
                     break;
             }

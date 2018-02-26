@@ -62,7 +62,7 @@ public class RxBus<T> {
             objectSubject = objectPublishSubject.toSerialized();
             stringSubjectMap.put(tag, objectSubject);
         }
-        Flowable<BusEvent<T>> tFollowable = objectSubject.toFlowable(BackpressureStrategy.BUFFER)
+        Flowable<BusEvent<T>> tFollowable = objectSubject.toFlowable(BackpressureStrategy.LATEST)
                 .filter(new Predicate<BusEvent>() {
                     @Override
                     public boolean test(BusEvent busEvent) throws Exception {
@@ -96,17 +96,24 @@ public class RxBus<T> {
     }
 
     public void unRegister(String tag) {
-        if (mSubscriptionMap == null) {
-            return;
+        if (mSubscriptionMap != null) {
+            if (!mSubscriptionMap.containsKey(tag)) {
+                return;
+            }
+            if (mSubscriptionMap.get(tag) != null) {
+                mSubscriptionMap.get(tag).dispose();
+            }
+            mSubscriptionMap.remove(tag);
         }
-
-        if (!mSubscriptionMap.containsKey(tag)) {
-            return;
+        if (stringSubjectMap != null) {
+            if (!stringSubjectMap.containsKey(tag)) {
+                return;
+            }
+            if (stringSubjectMap.get(tag) != null) {
+                stringSubjectMap.get(tag).unsubscribeOn(AndroidSchedulers.mainThread());
+            }
+            stringSubjectMap.remove(tag);
         }
-        if (mSubscriptionMap.get(tag) != null) {
-            mSubscriptionMap.get(tag).dispose();
-        }
-        mSubscriptionMap.remove(tag);
     }
 
     public void post(@NonNull BusEvent<T> o) {

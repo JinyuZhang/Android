@@ -4,6 +4,7 @@ import com.able.rx.network.RetrofitWrapper;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import io.reactivex.schedulers.Schedulers;
 
@@ -14,8 +15,8 @@ import io.reactivex.schedulers.Schedulers;
 public abstract class BaseNetModel<S, T> extends BaseModel implements NetResultCallback<T> {
     private RetrofitWrapper retrofitWrapper;
     private final S apiService;
-    private Observable<T> observableCall;
     private NetResultCallback<T> netResultCallback;
+    private Disposable subscribe;
 
     public BaseNetModel() {
         retrofitWrapper = createRetrofitWrapper(retrofitWrapper);
@@ -33,8 +34,7 @@ public abstract class BaseNetModel<S, T> extends BaseModel implements NetResultC
     public abstract Observable<T> createObservableCall(S apiService);
 
     public void execute() {
-        observableCall = createObservableCall(apiService);
-        observableCall.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<T>() {
+        subscribe = createObservableCall(apiService).subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Consumer<T>() {
             @Override
             public void accept(T t) throws Exception {
                 if (BaseNetModel.this.netResultCallback != null) {
@@ -52,6 +52,8 @@ public abstract class BaseNetModel<S, T> extends BaseModel implements NetResultC
     }
 
     public void onDestroy() {
-        observableCall.unsubscribeOn(Schedulers.io());
+        if (subscribe != null && !subscribe.isDisposed()) {
+            subscribe.dispose();
+        }
     }
 }
