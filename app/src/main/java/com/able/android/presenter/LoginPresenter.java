@@ -30,7 +30,6 @@ public class LoginPresenter extends AppCommonPresenter<ILoginView> implements Ap
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         loginModel.onDestroy();
     }
 

@@ -29,11 +29,11 @@ android {
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile project(':rxlib')
-    compile project(':qmui')
-    compile project(':utils')
-    compile project(':debug')
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     annotationProcessor 'com.alibaba:arouter-compiler:1.1.4'
+    implementation project(':debug')
+    implementation project(':qmui')
+    implementation project(':rxlib')
+    implementation project(':utils')
 }
