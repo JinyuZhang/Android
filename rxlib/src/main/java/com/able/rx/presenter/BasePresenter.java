@@ -1,7 +1,5 @@
 package com.able.rx.presenter;
 
-import android.support.annotation.CallSuper;
-
 import com.able.rx.bean.LifeType;
 import com.able.rx.tools.event.BusEvent;
 import com.able.rx.tools.event.RxBus;
@@ -28,24 +26,18 @@ public abstract class BasePresenter<V extends IBaseView> {
         @Override
         public void accept(BusEvent<LifeType> busEvent) throws Exception {
             switch (busEvent.getData()) {
-                case ON_CREATE:
-                    break;
                 case ON_RESUME:
-                    break;
-                case ON_STOP:
+                    RxBus.getInstance().register(classTag, cycleConsumer);
                     break;
                 case ON_DESTROY:
+                    RxBus.getInstance().unRegister(classTag);
                     onDestroy();
                     break;
             }
         }
     };
 
-    @CallSuper
-    public void onDestroy() {
-        RxBus.getInstance().unRegister(classTag);
-        contentView = null;
-    }
+    public abstract void onDestroy();
 
     public abstract String getTag();
 }

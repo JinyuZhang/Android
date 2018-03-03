@@ -90,11 +90,24 @@ public abstract class BaseActivity extends SwipeBackActivity implements IBaseVie
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
+    protected void onResume() {
+        super.onResume();
+        BusEvent<LifeType> busEvent = new BusEvent<>(getClassName());
+        busEvent.setData(LifeType.ON_RESUME);
+        RxBus.getInstance().post(getClassName(), busEvent);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
         BusEvent<LifeType> busEvent = new BusEvent<>(getClassName());
         busEvent.setData(LifeType.ON_DESTROY);
         RxBus.getInstance().post(getClassName(), busEvent);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
         if (rxTimer != null) {
             rxTimer.onDestroy();
         }

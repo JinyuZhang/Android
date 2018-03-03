@@ -7,7 +7,7 @@ import android.text.TextUtils;
 import com.able.rx.utils.JsonUtils;
 
 /**
- * Created by guanlijie on 2018/2/26.
+ * Created by ZhangJinyu on 2018/2/26.
  */
 
 public class BusEvent<T> implements Parcelable {
